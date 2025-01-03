@@ -35,6 +35,7 @@ jobs:
         # Upload build directory content
         path: 'publish/wwwroot'
   deploy:
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${\{ steps.deployment.outputs.page_url }}

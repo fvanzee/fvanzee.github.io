@@ -1,0 +1,35 @@
+@using System.Reflection.Metadata
+
+<MudPaper MaxWidth=@MaxWidth MinWidth="320px" Elevation="2">
+    <MudText class="d-flex align-center justify-center" Typo="Typo.h5">@Title</MudText>
+    <MudStack Row="true" Class="d-inline-flex justify-center flex-wrap gap-4 ma-2">
+        @foreach (var technology in Technologies)
+        {
+            var imageSrc = "images/" + technology.ImageName;
+            <MudPaper class="pa-2">
+                <MudImage class="ma-2" Height="100" Width="100" ObjectFit="ObjectFit.Contain" Alt="@technology.Name" Src=@imageSrc />
+                <br/>
+                <MudLink class="d-flex align-center justify-center" Href=@technology.Link>@technology.Name</MudLink>
+            </MudPaper>
+        }
+    </MudStack>
+</MudPaper>
+
+@code {
+
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public string MaxWidth { get; set; } = "320px";
+
+    [Parameter]
+    public List<Technology> Technologies { get; set; } = new List<Technology>();
+
+    public class Technology
+    {
+        public required string Name { get; init; }
+        public required string ImageName { get; init; }
+        public required string Link { get; init; }
+    }
+}

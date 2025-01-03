@@ -1,0 +1,78 @@
+﻿@page "/contact"
+@inject ISnackbar SnackbarService
+@inject HttpClient Http
+
+
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+
+<PageTitle>Freek van Zee | Contact Me</PageTitle>
+
+<MudPaper Elevation="10" Outlined="false" class="ma-4">
+    <MudText Class="pa-4" Typo="Typo.h4">Contact Me</MudText>
+    <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors" Class="px-4">
+        <MudTextField T="string" OnlyValidateIfDirty="true" Label="Email" Required="true" RequiredError="Email is required!"
+            @bind-Value="Model!.Email" Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
+        <MudTextField T="string" OnlyValidateIfDirty="true" Label="Phone" @bind-Value="Model!.Phone" />
+        <MudTextField T="string" OnlyValidateIfDirty="true" Label="Message" Required="true" RequiredError="Message is required!"
+            @bind-Value="Model!.Message" Lines="10" />
+
+    <div class="d-flex align-center justify-space-between pa-2">
+        <MudButton Variant="Variant.Filled" OnClick="Submit" Color="Color.Primary" Disabled="@(!success)" Class="ml-auto" >
+            Submit</MudButton>
+    </div>
+    </MudForm>
+</MudPaper>
+
+@code {
+    bool success;
+    string[] errors = { };
+    MudForm? form;
+
+    private ContactMe? Model;
+
+    protected override void OnInitialized()
+    {
+        Model ??= new();
+        form ??= new();
+    }
+
+    public class ContactMe
+    {
+        public string? Email { get; set; }
+        public string? Phone { get; set; }
+        public string? Message { get; set; }
+    }
+
+    public class PostEmailJs {
+        public required ContactMe TemplateParams { get; init; }
+        public required string ServiceId { get; init; }
+        public required string UserId { get; init; }
+        public required string TemplateId { get; init; }
+    }
+
+    private async Task Submit()
+    {
+        if (form != null)
+        {
+            await form.Validate();
+            if (success)
+            {
+                var postEmailJs = new PostEmailJs
+                {
+                    TemplateParams = Model!,
+                    ServiceId = "service_fuip2ma",
+                    UserId = "f-vOvMeTWXwWf3coN",
+                    TemplateId = "template_ckebaga"
+                };
+
+                await Http.PostAsJsonAsync("https://api.emailjs.com/api/v1.0/email/send", postEmailJs,
+                new System.Text.Json.JsonSerializerOptions {
+                    PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.SnakeCaseLower
+                });
+                SnackbarService.Add("Thank you for submitting your message!", Severity.Success);
+            }
+
+        }
+    }
+}

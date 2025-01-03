@@ -19,9 +19,9 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 9.0.0
+        dotnet-version: 9.0.101
     - name: Publish
-      run: dotnet publish -o ./publish
+      run: dotnet publish freekvanzee.csproj -o ./publish
     - name: Setup Pages
       uses: actions/configure-pages@v3
     - name: Upload artifact
@@ -32,5 +32,5 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v1
-      env:  
+      env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

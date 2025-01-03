@@ -27,21 +27,23 @@ jobs:
         dotnet-version: 9.0.101
     - name: Publish
       run: dotnet publish freekvanzee.csproj -o ./publish
-    - name: Setup Pages
-      uses: actions/configure-pages@v3
+
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v1
+      uses: actions/upload-pages-artifact@v3
       with:
         # Upload build directory content
         path: 'publish/wwwroot'
   deploy:
+    needs: build  # wait for the "build" job to get done before executing this "deploy" job
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${\{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Setup Pages
+      uses: actions/configure-pages@v5
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

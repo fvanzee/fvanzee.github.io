@@ -1,16 +1,18 @@
 ﻿@page "/contact"
 @inject ISnackbar SnackbarService
 @inject HttpClient Http
-
+@inject IJSRuntime JS
 
 @using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
+@using System.Text.Json.Serialization
+@using freekvanzee.Components;
 
 <PageTitle>Freek van Zee | Contact Me</PageTitle>
 
 <MudPaper Elevation="10" Outlined="false" class="ma-4">
     <MudText Class="pa-4" Typo="Typo.h4">Contact Me</MudText>
-    <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors" Class="px-4">
+    <MudForm @ref="form" @bind-IsValid="@_formSuccess" @bind-Errors="@errors" Class="px-4">
         <MudTextField T="string" OnlyValidateIfDirty="true" Label="Email" Required="true" RequiredError="Email is required!"
             @bind-Value="Model!.Email" Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
         <MudTextField T="string" OnlyValidateIfDirty="true" Label="Phone" @bind-Value="Model!.Phone" />
@@ -18,14 +20,16 @@
             @bind-Value="Model!.Message" Lines="10" />
 
     <div class="d-flex align-center justify-space-between pa-2">
-        <MudButton Variant="Variant.Filled" OnClick="Submit" Color="Color.Primary" Disabled="@(!success)" Class="ml-auto" >
+        <ReCaptcha @ref="reCaptchaComponent" SiteKey="6LcFsa4qAAAAAMpd3HkJGa3evsDj4N6BjNIx-Ek-" OnSuccess="OnSuccess" OnExpired="OnExpired" />
+        <MudButton Variant="Variant.Filled" OnClick="Submit" Color="Color.Primary" Disabled="@(!_formSuccess || !_validReCaptcha)" Class="ml-auto" >
             Submit</MudButton>
     </div>
     </MudForm>
 </MudPaper>
 
 @code {
-    bool success;
+    bool _formSuccess;
+
     string[] errors = { };
     MudForm? form;
 
@@ -44,11 +48,31 @@
         public string? Message { get; set; }
     }
 
+    public class TemplateParams : ContactMe
+    {
+        [JsonPropertyName("g-recaptcha-response")]
+        public required string RecaptchaToken { get; init; }
+    }
+
     public class PostEmailJs {
-        public required ContactMe TemplateParams { get; init; }
+        public required TemplateParams TemplateParams { get; init; }
         public required string ServiceId { get; init; }
         public required string UserId { get; init; }
         public required string TemplateId { get; init; }
+    }
+
+    private ReCaptcha? reCaptchaComponent;
+
+    private bool _validReCaptcha;
+
+    private void OnSuccess()
+    {
+        _validReCaptcha = true;
+    }
+
+    private void OnExpired()
+    {
+        _validReCaptcha = false;
     }
 
     private async Task Submit()
@@ -56,23 +80,47 @@
         if (form != null)
         {
             await form.Validate();
-            if (success)
+            if (!_formSuccess)
             {
-                var postEmailJs = new PostEmailJs
-                {
-                    TemplateParams = Model!,
-                    ServiceId = "service_fuip2ma",
-                    UserId = "f-vOvMeTWXwWf3coN",
-                    TemplateId = "template_ckebaga"
-                };
-
-                await Http.PostAsJsonAsync("https://api.emailjs.com/api/v1.0/email/send", postEmailJs,
-                new System.Text.Json.JsonSerializerOptions {
-                    PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.SnakeCaseLower
-                });
-                SnackbarService.Add("Thank you for submitting your message!", Severity.Success);
+                return;
             }
 
+            if (!_validReCaptcha)
+            {
+                SnackbarService.Add("Please complete the reCAPTCHA", Severity.Error);
+                return;
+            }
+
+            var recaptchaToken = await reCaptchaComponent!.GetResponseAsync();
+
+            var templateParams = new TemplateParams
+            {
+                Email = Model!.Email,
+                Phone = Model!.Phone,
+                Message = Model!.Message,
+                RecaptchaToken = recaptchaToken
+            };
+
+            var postEmailJs = new PostEmailJs
+            {
+                TemplateParams = templateParams,
+                ServiceId = "service_fuip2ma",
+                UserId = "f-vOvMeTWXwWf3coN",
+                TemplateId = "template_ckebaga",
+            };
+
+            var response = await Http.PostAsJsonAsync("https://api.emailjs.com/api/v1.0/email/send", postEmailJs,
+            new System.Text.Json.JsonSerializerOptions {
+                PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.SnakeCaseLower
+            });
+            if(response.IsSuccessStatusCode)
+            {
+                SnackbarService.Add("Thank you for submitting your message!", Severity.Success);
+            }
+            else
+            {
+                SnackbarService.Add("There was an error submitting your message. Please try again later.", Severity.Error);
+            }
         }
     }
 }

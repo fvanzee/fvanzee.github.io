@@ -19,11 +19,11 @@
         <MudTextField T="string" OnlyValidateIfDirty="true" Label="Message" Required="true" RequiredError="Message is required!"
             @bind-Value="Model!.Message" Lines="10" />
 
-    <div class="d-flex align-center justify-space-between pa-2">
+    <MudStack Row="true" Class="d-flex flex-wrap align-center justify-space-between pa-2">
         <ReCaptcha @ref="reCaptchaComponent" SiteKey="6LcFsa4qAAAAAMpd3HkJGa3evsDj4N6BjNIx-Ek-" OnSuccess="OnSuccess" OnExpired="OnExpired" />
         <MudButton Variant="Variant.Filled" OnClick="Submit" Color="Color.Primary" Disabled="@(!_formSuccess || !_validReCaptcha)" Class="ml-auto" >
             Submit</MudButton>
-    </div>
+    </MudStack>
     </MudForm>
 </MudPaper>
 

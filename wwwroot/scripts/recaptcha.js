@@ -41,5 +41,9 @@ var reCAPTCHA;
   function getResponse(widgetId) {
     return grecaptcha.getResponse(widgetId);
   }
+  function reset() {
+    grecaptcha.reset();
+  }
   reCAPTCHA.getResponse = getResponse;
+  reCAPTCHA.reset = reset;
 })((reCAPTCHA = reCAPTCHA || (reCAPTCHA = {})));

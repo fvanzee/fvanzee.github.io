@@ -46,4 +46,9 @@
     {
         return JS.InvokeAsync<string>("reCAPTCHA.getResponse", WidgetId);
     }
+
+    public ValueTask ResetAsync()
+    {
+        return JS.InvokeVoidAsync("reCAPTCHA.reset");
+    }
 }

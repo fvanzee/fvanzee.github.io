@@ -121,6 +121,7 @@
             {
                 SnackbarService.Add("There was an error submitting your message. Please try again later.", Severity.Error);
             }
+            await reCaptchaComponent.ResetAsync();
         }
     }
 }

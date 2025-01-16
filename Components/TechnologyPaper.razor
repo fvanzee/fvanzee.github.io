@@ -7,8 +7,9 @@
         {
             var imageSrc = "images/" + technology.ImageName;
             <MudPaper class="pa-2">
-                <MudImage class="ma-2" Height="100" Width="100" ObjectFit="ObjectFit.Contain" Alt="@technology.Name" Src=@imageSrc />
-                <br/>
+                <MudImage class="ma-2" Height="100" Width="100" ObjectFit="ObjectFit.Contain" Alt="@technology.Name"
+                    Src=@imageSrc />
+                <br />
                 <MudLink class="d-flex align-center justify-center" Href=@technology.Link>@technology.Name</MudLink>
             </MudPaper>
         }

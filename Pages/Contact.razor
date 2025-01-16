@@ -1,9 +1,7 @@
 ﻿@page "/contact"
 @inject ISnackbar SnackbarService
 @inject HttpClient Http
-@inject IJSRuntime JS
 
-@using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
 @using System.Text.Json.Serialization
 @using freekvanzee.Components;
@@ -12,33 +10,36 @@
 
 <MudPaper Elevation="10" Outlined="false" class="ma-4">
     <MudText Class="pa-4" Typo="Typo.h4">Contact Me</MudText>
-    <MudForm @ref="form" @bind-IsValid="@_formSuccess" @bind-Errors="@errors" Class="px-4">
-        <MudTextField T="string" OnlyValidateIfDirty="true" Label="Email" Required="true" RequiredError="Email is required!"
-            @bind-Value="Model!.Email" Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
-        <MudTextField T="string" OnlyValidateIfDirty="true" Label="Phone" @bind-Value="Model!.Phone" />
-        <MudTextField T="string" OnlyValidateIfDirty="true" Label="Message" Required="true" RequiredError="Message is required!"
-            @bind-Value="Model!.Message" Lines="10" />
+    <MudForm @ref="_form" @bind-IsValid="@_formSuccess" @bind-Errors="@_errors" Class="px-4">
+        <MudTextField T="string" OnlyValidateIfDirty="true" Label="Email" Required="true"
+            RequiredError="Email is required!" @bind-Value="_model!.Email"
+            Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
+        <MudTextField T="string" OnlyValidateIfDirty="true" Label="Phone" @bind-Value="_model!.Phone" />
+        <MudTextField T="string" OnlyValidateIfDirty="true" Label="Message" Required="true"
+            RequiredError="Message is required!" @bind-Value="_model!.Message" Lines="10" />
 
-    <MudStack Row="true" Class="d-flex flex-wrap align-center justify-space-between pa-2">
-        <ReCaptcha @ref="reCaptchaComponent" SiteKey="6LcFsa4qAAAAAMpd3HkJGa3evsDj4N6BjNIx-Ek-" OnSuccess="OnSuccess" OnExpired="OnExpired" />
-        <MudButton Variant="Variant.Filled" OnClick="Submit" Color="Color.Primary" Disabled="@(!_formSuccess || !_validReCaptcha)" Class="ml-auto" >
-            Submit</MudButton>
-    </MudStack>
+        <MudStack Row="true" Class="d-flex flex-wrap align-center justify-space-between pa-2">
+            <ReCaptcha @ref="_reCaptchaComponent" SiteKey="6LcFsa4qAAAAAMpd3HkJGa3evsDj4N6BjNIx-Ek-"
+                OnSuccess="OnSuccess" OnExpired="OnExpired" />
+            <MudButton Variant="Variant.Filled" OnClick="Submit" Color="Color.Primary"
+                Disabled="@(!_formSuccess || !_validReCaptcha)" Class="ml-auto">
+                Submit</MudButton>
+        </MudStack>
     </MudForm>
 </MudPaper>
 
 @code {
     bool _formSuccess;
 
-    string[] errors = { };
-    MudForm? form;
+    string[] _errors = [];
+    MudForm? _form;
 
-    private ContactMe? Model;
+    private ContactMe? _model;
 
     protected override void OnInitialized()
     {
-        Model ??= new();
-        form ??= new();
+        _model ??= new();
+        _form ??= new();
     }
 
     public class ContactMe
@@ -54,14 +55,15 @@
         public required string RecaptchaToken { get; init; }
     }
 
-    public class PostEmailJs {
+    public class PostEmailJs
+    {
         public required TemplateParams TemplateParams { get; init; }
         public required string ServiceId { get; init; }
         public required string UserId { get; init; }
         public required string TemplateId { get; init; }
     }
 
-    private ReCaptcha? reCaptchaComponent;
+    private ReCaptcha? _reCaptchaComponent;
 
     private bool _validReCaptcha;
 
@@ -77,9 +79,9 @@
 
     private async Task Submit()
     {
-        if (form != null)
+        if (_form != null)
         {
-            await form.Validate();
+            await _form.Validate();
             if (!_formSuccess)
             {
                 return;
@@ -91,29 +93,30 @@
                 return;
             }
 
-            var recaptchaToken = await reCaptchaComponent!.GetResponseAsync();
+            var recaptchaToken = await _reCaptchaComponent!.GetResponseAsync();
 
             var templateParams = new TemplateParams
-            {
-                Email = Model!.Email,
-                Phone = Model!.Phone,
-                Message = Model!.Message,
-                RecaptchaToken = recaptchaToken
-            };
+                {
+                    Email = _model!.Email,
+                    Phone = _model!.Phone,
+                    Message = _model!.Message,
+                    RecaptchaToken = recaptchaToken
+                };
 
             var postEmailJs = new PostEmailJs
-            {
-                TemplateParams = templateParams,
-                ServiceId = "service_fuip2ma",
-                UserId = "f-vOvMeTWXwWf3coN",
-                TemplateId = "template_ckebaga",
-            };
+                {
+                    TemplateParams = templateParams,
+                    ServiceId = "service_fuip2ma",
+                    UserId = "f-vOvMeTWXwWf3coN",
+                    TemplateId = "template_ckebaga",
+                };
 
             var response = await Http.PostAsJsonAsync("https://api.emailjs.com/api/v1.0/email/send", postEmailJs,
-            new System.Text.Json.JsonSerializerOptions {
-                PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.SnakeCaseLower
-            });
-            if(response.IsSuccessStatusCode)
+            new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.SnakeCaseLower
+                });
+            if (response.IsSuccessStatusCode)
             {
                 SnackbarService.Add("Thank you for submitting your message!", Severity.Success);
             }
@@ -121,7 +124,7 @@
             {
                 SnackbarService.Add("There was an error submitting your message. Please try again later.", Severity.Error);
             }
-            await reCaptchaComponent.ResetAsync();
+            await _reCaptchaComponent.ResetAsync();
         }
     }
 }

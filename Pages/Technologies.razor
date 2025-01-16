@@ -7,51 +7,52 @@
     <TechnologyPaper Technologies=@_languages Title="Programming Languages" />
     <TechnologyPaper Technologies=@_frameworks Title="Web Frameworks" />
     <TechnologyPaper Technologies=@_cloudProviders Title="Cloud" MaxWidth="480px" />
-    <TechnologyPaper Technologies=@_cloudNatives Title="Cloud Native" MaxWidth="640px"/>
+    <TechnologyPaper Technologies=@_cloudNatives Title="Cloud Native" MaxWidth="640px" />
 </MudStack>
 
 @code {
     private List<Technology> _languages = new List<Technology>
-    {
-        new Technology { Name = "C#", ImageName = "csharp.webp", Link = "https://docs.microsoft.com/en-us/dotnet/csharp/" },
-        new Technology { Name = "Typescript", ImageName = "typescript.webp", Link = "https://www.typescriptlang.org/" },
-        new Technology { Name = "Python", ImageName = "python.webp", Link = "https://www.python.org/" },
-        new Technology { Name = "Rust", ImageName = "rust.webp", Link = "https://www.rust-lang.org/" },
-    };
+{
+new Technology { Name = "C#", ImageName = "csharp.webp", Link = "https://docs.microsoft.com/en-us/dotnet/csharp/" },
+new Technology { Name = "Typescript", ImageName = "typescript.webp", Link = "https://www.typescriptlang.org/" },
+new Technology { Name = "Python", ImageName = "python.webp", Link = "https://www.python.org/" },
+new Technology { Name = "Rust", ImageName = "rust.webp", Link = "https://www.rust-lang.org/" },
+};
 
     private List<Technology> _frameworks = new List<Technology>
-    {
-        new Technology { Name = "ASP.NET Core", ImageName = "aspnetcore.webp", Link = "https://docs.microsoft.com/en-us/aspnet/core/" },
-        new Technology { Name = "NestJS", ImageName = "nestjs.svg", Link = "https://nestjs.com/" },
-        new Technology { Name = "Django", ImageName = "django.webp", Link = "https://www.djangoproject.com/" },
-        new Technology { Name = "Flask", ImageName = "flask.webp", Link = "https://flask.palletsprojects.com/" },
-    };
+{
+new Technology { Name = "ASP.NET Core", ImageName = "aspnetcore.webp", Link =
+"https://docs.microsoft.com/en-us/aspnet/core/" },
+new Technology { Name = "NestJS", ImageName = "nestjs.svg", Link = "https://nestjs.com/" },
+new Technology { Name = "Django", ImageName = "django.webp", Link = "https://www.djangoproject.com/" },
+new Technology { Name = "Flask", ImageName = "flask.webp", Link = "https://flask.palletsprojects.com/" },
+};
 
     private List<Technology> _cloudProviders = new List<Technology>
-    {
-        new Technology { Name = "Azure", ImageName = "azure.webp", Link = "https://azure.microsoft.com/" },
-        new Technology { Name = "AWS", ImageName = "aws.webp", Link = "https://aws.amazon.com/" },
-        new Technology { Name = "GCP", ImageName = "gcp.webp", Link = "https://cloud.google.com/" },
-        new Technology { Name = "Alibaba Cloud", ImageName = "alibaba.webp", Link = "https://www.alibabacloud.com/" },
-    };
+{
+new Technology { Name = "Azure", ImageName = "azure.webp", Link = "https://azure.microsoft.com/" },
+new Technology { Name = "AWS", ImageName = "aws.webp", Link = "https://aws.amazon.com/" },
+new Technology { Name = "GCP", ImageName = "gcp.webp", Link = "https://cloud.google.com/" },
+new Technology { Name = "Alibaba Cloud", ImageName = "alibaba.webp", Link = "https://www.alibabacloud.com/" },
+};
 
     private List<Technology> _cloudNatives = new List<Technology>
-    {
-        new Technology { Name = "Terraform", ImageName = "terraform.webp", Link = "https://www.terraform.io/" },
-        new Technology { Name = "Pulumi", ImageName = "pulumi.webp", Link = "https://www.pulumi.com/" },
-        new Technology { Name = "Kubernetes", ImageName = "kubernetes.webp", Link = "https://kubernetes.io/" },
-        new Technology { Name = "Docker", ImageName = "docker.webp", Link = "https://www.docker.com/" },
-        new Technology { Name = "Helm", ImageName = "helm.svg", Link = "https://helm.sh/" },
-        new Technology { Name = "Istio", ImageName = "istio.webp", Link = "https://istio.io/" },
-        new Technology { Name = "Envoy", ImageName = "envoy.webp", Link = "https://www.envoyproxy.io/" },
-        new Technology { Name = "Traefik", ImageName = "traefik.webp", Link = "https://traefik.io/" },
-        new Technology { Name = "OpenTelemetry", ImageName = "otel.webp", Link = "https://opentelemetry.io/" },
-        new Technology { Name = "Grafana", ImageName = "grafana.webp", Link = "https://grafana.com/" },
-        new Technology { Name = "Prometheus", ImageName = "prometheus.webp", Link = "https://prometheus.io/" },
-        new Technology { Name = "Jaeger", ImageName = "jaeger.webp", Link = "https://www.jaegertracing.io/" },
-        new Technology { Name = "Dapr", ImageName = "dapr.webp", Link = "https://dapr.io/" },
-        new Technology { Name = "ArgoCD", ImageName = "argocd.webp", Link = "https://argoproj.github.io/argo-cd/" },
-    };
+{
+new Technology { Name = "Terraform", ImageName = "terraform.webp", Link = "https://www.terraform.io/" },
+new Technology { Name = "Pulumi", ImageName = "pulumi.webp", Link = "https://www.pulumi.com/" },
+new Technology { Name = "Kubernetes", ImageName = "kubernetes.webp", Link = "https://kubernetes.io/" },
+new Technology { Name = "Docker", ImageName = "docker.webp", Link = "https://www.docker.com/" },
+new Technology { Name = "Helm", ImageName = "helm.svg", Link = "https://helm.sh/" },
+new Technology { Name = "Istio", ImageName = "istio.webp", Link = "https://istio.io/" },
+new Technology { Name = "Envoy", ImageName = "envoy.webp", Link = "https://www.envoyproxy.io/" },
+new Technology { Name = "Traefik", ImageName = "traefik.webp", Link = "https://traefik.io/" },
+new Technology { Name = "OpenTelemetry", ImageName = "otel.webp", Link = "https://opentelemetry.io/" },
+new Technology { Name = "Grafana", ImageName = "grafana.webp", Link = "https://grafana.com/" },
+new Technology { Name = "Prometheus", ImageName = "prometheus.webp", Link = "https://prometheus.io/" },
+new Technology { Name = "Jaeger", ImageName = "jaeger.webp", Link = "https://www.jaegertracing.io/" },
+new Technology { Name = "Dapr", ImageName = "dapr.webp", Link = "https://dapr.io/" },
+new Technology { Name = "ArgoCD", ImageName = "argocd.webp", Link = "https://argoproj.github.io/argo-cd/" },
+};
 
 
 }

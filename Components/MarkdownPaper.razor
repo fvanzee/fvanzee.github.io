@@ -1,0 +1,61 @@
+@using System.Reflection.Metadata
+@using Markdig
+@inject HttpClient HttpClient
+@inject IJSRuntime JS
+
+
+@if (HtmlContent == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="markdown pa-4">
+    @((MarkupString)HtmlContent)
+</div>
+    <script>hljs.highlightAll();</script>
+}
+
+@code {
+
+    private bool _onInitialized;
+
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public string MarkdownFile { get; set; } = string.Empty;
+
+    private string HtmlContent = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var markdown = await HttpClient.GetStringAsync(MarkdownFile);
+            var pipeline = new MarkdownPipelineBuilder()
+            .UseAdvancedExtensions()
+            .UseMediaLinks()
+            .UseListExtras()
+            .UseEmojiAndSmiley()
+            .Build();
+
+            HtmlContent = Markdig.Markdown.ToHtml(markdown, pipeline);
+
+            _onInitialized = true;
+
+        }
+        catch (Exception ex)
+        {
+            HtmlContent = ex.Message;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_onInitialized)
+        {
+            await JS.InvokeVoidAsync("hljs.highlightAll");
+        }
+    }
+}

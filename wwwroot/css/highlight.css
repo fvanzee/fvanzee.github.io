@@ -1,0 +1,126 @@
+/*!
+  Theme: Default
+  Description: Original highlight.js style
+  Author: (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
+  Maintainer: @highlightjs/core-team
+  Website: https://highlightjs.org/
+  License: see project LICENSE
+  Touched: 2021
+*/
+pre code.hljs {
+    display: block;
+    /* overflow-x: auto; */
+    /* padding: 1em; */
+    background-color: #2d2d2d;
+    /* Dark grey background */
+    color: #68f5ff;
+    /* Light text color for contrast */
+    font-family: 'Courier New', Courier, monospace;
+    /* Monospace font for code */
+    padding: 16px;
+    /* Padding inside the block */
+    border-radius: 8px;
+    /* Rounded corners */
+    overflow-x: auto;
+    /* Horizontal scrolling if content overflows */
+    max-width: 860px;
+    /* Fixed width of the container */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Optional shadow for better appearance */
+    border: 1px solid #444;
+    /* Subtle border */
+    white-space: pre;
+    /* Preserve whitespace and formatting */
+    margin: 16px auto;
+    /* Center the block */
+    width: 90%;
+    /* Take up 90% of the width */
+}
+
+code.hljs {
+    padding: 3px 5px
+}
+
+.hljs {
+    background: #f3f3f3;
+    color: rgb(217, 219, 255)
+}
+
+.hljs-comment {
+    color: #697070
+}
+
+.hljs-punctuation,
+.hljs-tag {
+    color: rgb(217, 219, 255)
+}
+
+.hljs-tag .hljs-attr,
+.hljs-tag .hljs-name {
+    color: rgb(217, 219, 255)
+}
+
+.hljs-attribute,
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-name,
+.hljs-selector-tag {
+    color: #00d7d7;
+    /* font-weight: 700 */
+}
+
+.hljs-deletion,
+.hljs-number,
+.hljs-quote,
+.hljs-selector-class,
+.hljs-selector-id,
+.hljs-string,
+.hljs-template-tag,
+.hljs-type {
+    color: rgb(255, 255, 255)
+}
+
+.hljs-section,
+.hljs-title {
+    color: rgb(217, 219, 255);
+    font-weight: 700
+}
+
+.hljs-link,
+.hljs-operator,
+.hljs-regexp,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-symbol,
+.hljs-template-variable,
+.hljs-variable {
+    color: #ab5656
+}
+
+.hljs-literal {
+    color: rgb(255, 255, 255)
+}
+
+.hljs-addition,
+.hljs-built_in,
+.hljs-bullet,
+.hljs-code {
+    color: #00d7d7
+}
+
+.hljs-meta {
+    color: #1f7199
+}
+
+.hljs-meta .hljs-string {
+    color: #38a
+}
+
+.hljs-emphasis {
+    font-style: italic
+}
+
+.hljs-strong {
+    font-weight: 700
+}

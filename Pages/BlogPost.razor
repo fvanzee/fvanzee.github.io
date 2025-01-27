@@ -1,0 +1,23 @@
+﻿@page "/blogs/{title}"
+@inject HttpClient Http
+
+
+@using freekvanzee.Components;
+
+<PageTitle>Freek van Zee | Blog | @Title</PageTitle>
+
+<MudPaper MinWidth="320px" class="align-center ma-4">
+    <MarkdownPaper MarkdownFile=@MarkdownFile />
+</MudPaper>
+
+@code {
+    private string MarkdownFile { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        MarkdownFile = $"blogs/{Title}.md";
+    }   
+}

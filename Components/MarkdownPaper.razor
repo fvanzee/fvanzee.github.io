@@ -1,5 +1,6 @@
 @using System.Reflection.Metadata
 @using Markdig
+@using System.Text.RegularExpressions
 @inject HttpClient HttpClient
 @inject IJSRuntime JS
 
@@ -10,13 +11,22 @@
 }
 else
 {
-    <div class="markdown pa-4">
-    @((MarkupString)HtmlContent)
-</div>
+    <MudText Class="pl-4 pt-4" Typo="Typo.h6">@Title</MudText>
+    @if (Created.HasValue)
+    {
+        <MudText Class="pl-4 pb-4" Typo="Typo.body2">@Created.Value.ToString("D")</MudText>
+    }
+    <br/>
+    <MudDivider />
+    <div class="py-4 markdown">
+        @((MarkupString)HtmlContent)
+    </div>
     <script>hljs.highlightAll();</script>
 }
 
 @code {
+
+    private Regex BlogMetaRegex = new Regex( @"^<!--\nAuthor: (?<Author>[\w\s]+)\nCreated: (?<Created>\d\d\d\d\d\d\d\d)\n-->");
 
     private bool _onInitialized;
 
@@ -27,6 +37,10 @@ else
     public string MarkdownFile { get; set; } = string.Empty;
 
     private string HtmlContent = string.Empty;
+
+    private string Author { get; set; } = string.Empty;
+
+    private DateTime? Created { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -39,6 +53,20 @@ else
             .UseListExtras()
             .UseEmojiAndSmiley()
             .Build();
+
+            var blogMetaMatch = BlogMetaRegex.Match(markdown);
+
+            if (blogMetaMatch.Success)
+            {
+                var created = blogMetaMatch.Groups["Created"].Value;
+                Created = DateTime.ParseExact(created, "yyyyMMdd", null);
+                var author = blogMetaMatch.Groups["Author"].Value;
+            }
+            else
+            {
+                Console.WriteLine("No match");
+            }
+
 
             HtmlContent = Markdig.Markdown.ToHtml(markdown, pipeline);
 
@@ -56,6 +84,7 @@ else
         if (_onInitialized)
         {
             await JS.InvokeVoidAsync("hljs.highlightAll");
+            await JS.InvokeVoidAsync("renderCopyBlocks");
         }
     }
 }

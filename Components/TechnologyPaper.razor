@@ -5,7 +5,7 @@
     <MudStack Row="true" Class="d-inline-flex justify-center flex-wrap gap-4 ma-2">
         @foreach (var technology in Technologies)
         {
-            var imageSrc = "images/" + technology.ImageName;
+            var imageSrc = "images/technologies/" + technology.ImageName;
             <MudPaper class="pa-2">
                 <MudImage class="ma-2" Height="100" Width="100" ObjectFit="ObjectFit.Contain" Alt="@technology.Name"
                     Src=@imageSrc />

@@ -112,8 +112,8 @@ a,
     transition: width 0.4s ease-in-out;
 }
 
-code {
-    color: #04a1ad;
+p code {
+    color: #569fff;
     padding-block: 1px;
     padding-inline: 3px;
     background-color: #2d2d2d;

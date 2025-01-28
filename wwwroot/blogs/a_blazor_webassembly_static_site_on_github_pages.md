@@ -1,7 +1,7 @@
-# A Blazor WebAssembly static site on Github Pages
-
-<br>
-
+<!--
+Author: Freek van Zee
+Created: 20250128
+-->
 For a long while I've wanted to setup a personal portfolio website.  
 <br>
 Being mainly a backend and DevOps developer specialized in .NET, using Blazor to do this seemed the right choice. I wanted to limit the amount of JavaScript (who doesn't?!) and CSS.
@@ -116,7 +116,7 @@ Next you might want to setup your styling configuration to create a more persona
 
 I simply went for the default Dark Theme, and changed the loading bar animation.
 
-You can find CSS for loading bars on [freefrontend.com](https://freefrontend.com/css-progress-bars/) if you don't want to bother creating your own like me.
+You can find CSS for loading bars on [freefrontend.com](https://freefrontend.com/css-progress-bars/) if you don't want to bother creating your own.
 
 ```razor
 @* MainLayout.razor *@
@@ -190,7 +190,7 @@ Add the pages you defined in your navigation component (`Layout/NavMenu.razor`) 
 
 <br>
 
-Build your pages however you like. Make good use of MudBlazor Components like `MudCard` and `MudPaper`, as they can help you get all your content nicely centered and responsive.
+Build your pages however you like.If you're using MudBlazor, make good use of components like `MudContainer`, `MudCard` and `MudPaper`, as they can help you get all your content nicely centered and responsive.
 
 <br>
 
@@ -203,6 +203,12 @@ The Technologies page doesn't have any extra integrations, and you can find the 
 The Contact page, using EmailJS + ReCaptcha deserves a separate shorter blog post.
 
 <br>
+
+Test your site locally to make sure everything is working as expected.
+
+```shell
+$ dotnet run
+```
 
 ## Github Pages
 
@@ -224,7 +230,7 @@ Choose whether you want to host your site on:
 
 <br>
 
-If you want to have a "User / Organization site", you repository must be named `{your_gh_username}.github.io`.  
+If you want to have a "User / Organization site", your GitHub repository must be named `{your_gh_username}.github.io`.  
 Setting up GitHub pages for any other repository name will result in a project site.
 
 <br>
@@ -233,12 +239,6 @@ It's important to note that on a "Project site", your site's `index.html` will b
 This is not needed when using a "User / Organisation site", as this will be running on the root path.
 
 <br>
-
-Test your site locally to make sure everything is working as expected.
-
-```shell
-$ dotnet run
-```
 
 ### Github Workflows / Build and Deploy
 
@@ -307,7 +307,7 @@ Make sure to replace `{your_project_name}` and check the `dotnet-version`.
 
 <br>
 
-Once you've pushed your code to the github repository, and the build and deploy pipeline finished, you should have live site at `{your_gh_username}.github.io`!
+Once you've pushed your code to the github repository, and the build and deploy pipeline finished, you should have a live site at `{your_gh_username}.github.io`!
 
 <br>
 
@@ -319,6 +319,6 @@ You might notice when you navigate to one of your pages and refresh, your end up
 
 <br>
 
-To resolve this you can add a `404.html` page next to your `index.html`. GitHub page will load this page on `404` results, so it can be leveraged to rewrite to the root, while retaining path information in query parameters.
+To resolve this you can add a `404.html` page next to your `index.html`. GitHub Pages will load this file on `404` results, so it can be leveraged to rewrite to the root, while retaining path information in query parameters.
 
 Get the `404.html` page I am using [HERE](https://raw.githubusercontent.com/rafgraph/spa-github-pages/refs/heads/gh-pages/404.html)!

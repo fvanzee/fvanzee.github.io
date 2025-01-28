@@ -21,3 +21,71 @@ p {
     margin-right: auto;
     width: 90%;
 }
+
+pre:has(code) {
+    position: relative;
+    overflow: auto;
+
+    /* make space  */
+    margin: 5px 0;
+    padding: 1.75rem 0 1.75rem 1rem;
+    /* border-radius: 10px; */
+    display: block;
+    /* overflow-x: auto; */
+    /* padding: 1em; */
+    background-color: #2d2d2d;
+    /* Dark grey background */
+    color: #68f5ff;
+    /* Light text color for contrast */
+    font-family: 'Courier New', Courier, monospace;
+    /* Monospace font for code */
+    padding: 12px;
+    /* Padding inside the block */
+    border-radius: 8px;
+    /* Rounded corners */
+    overflow-x: auto;
+    /* Horizontal scrolling if content overflows */
+    overflow-y: auto;
+    /* Vertical scrolling if content overflows */
+    max-height: 500px;
+    /* Maximum height of the block */
+    max-width: 860px;
+    /* Fixed width of the container */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Optional shadow for better appearance */
+    border: 1px solid #444;
+    /* Subtle border */
+    white-space: pre;
+    /* Preserve whitespace and formatting */
+    margin: 16px auto;
+    /* Center the block */
+    width: 90%;
+    /* Take up 90% of the width */
+
+}
+
+pre:has(code) button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: white;
+
+    font-size: 0.9rem;
+    padding: 0.15rem;
+    background-color: #828282;
+    color: white;
+
+    border: ridge 1px #7b7b7c;
+    border-radius: 5px;
+    text-shadow: #c4c4c4 0 0 2px;
+    display: none;
+}
+
+pre:has(code):hover button {
+    display: block;
+}
+
+pre:has(code) button:hover {
+    cursor: pointer;
+    background-color: #bcbabb;
+}

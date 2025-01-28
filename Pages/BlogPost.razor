@@ -1,23 +1,25 @@
-﻿@page "/blogs/{title}"
+﻿@page "/blogs/{slug}"
 @inject HttpClient Http
 
 
 @using freekvanzee.Components;
+@using freekvanzee.Helpers
 
-<PageTitle>Freek van Zee | Blog | @Title</PageTitle>
-
-<MudPaper MinWidth="320px" class="align-center ma-4">
-    <MarkdownPaper MarkdownFile=@MarkdownFile />
-</MudPaper>
+<PageTitle>Freek van Zee | Blog | @BlogHelper.GetTitleCaseTitle(Slug)</PageTitle>
+<MudCard>
+    <MudCardMedia Style="background-size: contain;" Image=@ImageSrc />
+    @* <MudPaper MinWidth="320px" class="align-center ma-4"> *@
+        <MarkdownPaper Title=@BlogHelper.GetTitleCaseTitle(Slug) MarkdownFile=@MarkdownFile />
+    @* </MudPaper> *@
+</MudCard>
 
 @code {
-    private string MarkdownFile { get; set; } = string.Empty;
 
     [Parameter]
-    public string Title { get; set; } = string.Empty;
+    public string Slug { get; set; } = string.Empty;
 
-    protected override void OnInitialized()
-    {
-        MarkdownFile = $"blogs/{Title}.md";
-    }   
+    private string ImageSrc => $"images/blogs/{Slug}.png";
+
+    private string MarkdownFile => $"blogs/{Slug}.md";
+
 }

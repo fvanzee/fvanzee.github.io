@@ -1,0 +1,42 @@
+<PageTitle>@Title</PageTitle>
+<HeadContent>
+    <meta Name="keywords" Content=@Keywords />
+    <meta property="og:type" content=@Type />
+    <meta property="og:title" content="@Title" />
+    <meta property="og:url" content="https://www.fvanzee.nl/@UrlPath" />
+    @if(Type == "profile")
+    {
+        <meta property="profile:first_name" content="Freek" />
+        <meta property="profile:last_name" content="van Zee" />
+        <meta property="profile:username" content="fvanzee" />
+    }
+    <meta Name="description" Content="@Description" />
+    <meta Property="og:description" Content="@Description" />
+    @if (!string.IsNullOrEmpty(ImagePath))
+    {
+        <meta property="og:image" content="https://www.fvanzee.nl/@ImagePath" />
+    }
+    {
+</HeadContent>
+
+
+@code {
+    [Parameter]
+    public required string Title { get; init; }
+
+    [Parameter]
+    public required string Description { get; init; }
+
+    [Parameter]
+    public required string UrlPath { get; init; }
+
+    [Parameter]
+    public string? ImagePath { get; init; }
+
+    [Parameter]
+    public required string Keywords { get; init; }
+
+    [Parameter]
+    public required string Type { get; init; }
+
+}

@@ -2,7 +2,15 @@
 @using freekvanzee.Components
 @using static freekvanzee.Components.TechnologyPaper
 
-<PageTitle>Freek van Zee | Technologies</PageTitle>
+<PageTitle>Freek van Zee | </PageTitle>
+<SeoHeader 
+    Title="Freek van Zee | Technologies" 
+    Description="Freek van Zee's favorite programming languages, web frameworks, and cloud-native technologies." 
+    Keywords="technologies, developer, cloud"
+    Type="profile"
+    ImagePath="images/me.jpg"
+    UrlPath="technologies/" />
+
 <MudStack Row="true" Class="d-inline-flex justify-center flex-wrap gap-4 ma-2">
     <TechnologyPaper Technologies=@_languages Title="Programming Languages" />
     <TechnologyPaper Technologies=@_frameworks Title="Web Frameworks" />

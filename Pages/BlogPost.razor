@@ -1,25 +1,102 @@
-﻿@page "/blogs/{slug}"
+﻿@page "/blog/{slug}"
 @inject HttpClient Http
+@inject IJSRuntime JS
 
-
+@using Markdig
+@using System.Text.RegularExpressions
 @using freekvanzee.Components;
 @using freekvanzee.Helpers
 
-<PageTitle>Freek van Zee | Blog | @BlogHelper.GetTitleCaseTitle(Slug)</PageTitle>
+@{
+    var pageTitle = $"Freek van Zee | Blog | {BlogHelper.GetTitleCaseTitle(Slug)}";
+}
+<SeoHeader 
+    Type="article" 
+    Title=@pageTitle 
+    Description=@Description 
+    Keywords=@Keywords 
+    ImagePath=@ImageSrc 
+    UrlPath=@UrlPath />
+
 <MudCard>
     <MudCardMedia Style="background-size: contain;" Image=@ImageSrc />
-    @* <MudPaper MinWidth="320px" class="align-center ma-4"> *@
-        <MarkdownPaper Title=@BlogHelper.GetTitleCaseTitle(Slug) MarkdownFile=@MarkdownFile />
-    @* </MudPaper> *@
+    @if(!string.IsNullOrEmpty(HtmlContent))
+    {
+        <MarkdownPaper HtmlContent=@HtmlContent Title=@BlogHelper.GetTitleCaseTitle(Slug) Created=@Created />
+    }
 </MudCard>
 
 @code {
 
+    private bool _onInitialized;
+
+     private Regex BlogMetaRegex = new Regex( @"^<!--\nDescription: (?<Description>.+)\nKeywords: (?<Keywords>.+)\nAuthor: (?<Author>[\w\s]+)\nCreated: (?<Created>\d\d\d\d\d\d\d\d)\n-->");
+
     [Parameter]
-    public string Slug { get; set; } = string.Empty;
+    public required string Slug { get; init; }
 
-    private string ImageSrc => $"images/blogs/{Slug}.png";
+    private string ImageSrc => $"images/blog/{Slug}.png";
 
-    private string MarkdownFile => $"blogs/{Slug}.md";
+    private string UrlPath => $"blog/{Slug}";
+
+    private string MarkdownFile => $"{UrlPath}.md";
+
+    private string HtmlContent { get; set; } = string.Empty;
+
+    private string Description { get; set; } = string.Empty;
+
+    private string Keywords { get; set; } = string.Empty;
+
+    private string Author { get; set; } = string.Empty;
+
+    private DateTime Created { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var markdown = await Http.GetStringAsync(MarkdownFile);
+            var pipeline = new MarkdownPipelineBuilder()
+            .UseAdvancedExtensions()
+            .UseMediaLinks()
+            .UseListExtras()
+            .UseEmojiAndSmiley()
+            .Build();
+
+            var blogMetaMatch = BlogMetaRegex.Match(markdown);
+
+            if (blogMetaMatch.Success)
+            {
+                var created = blogMetaMatch.Groups["Created"].Value;
+                Created = DateTime.ParseExact(created, "yyyyMMdd", null);
+                Author = blogMetaMatch.Groups["Author"].Value;
+                Description = blogMetaMatch.Groups["Description"].Value;
+                Keywords = blogMetaMatch.Groups["Keywords"].Value;
+            }
+            else
+            {
+                Console.WriteLine("No match");
+            }
+
+
+            HtmlContent = Markdig.Markdown.ToHtml(markdown, pipeline);
+
+            _onInitialized = true;
+
+        }
+        catch (Exception ex)
+        {
+            HtmlContent = ex.Message;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_onInitialized)
+        {
+            await JS.InvokeVoidAsync("hljs.highlightAll");
+            await JS.InvokeVoidAsync("renderCopyBlocks");
+        }
+    }
 
 }

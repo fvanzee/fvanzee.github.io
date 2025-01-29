@@ -5,86 +5,22 @@
 @inject IJSRuntime JS
 
 
-@if (HtmlContent == null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <MudText Class="pl-4 pt-4" Typo="Typo.h6">@Title</MudText>
-    @if (Created.HasValue)
-    {
-        <MudText Class="pl-4 pb-4" Typo="Typo.body2">@Created.Value.ToString("D")</MudText>
-    }
-    <br/>
-    <MudDivider />
-    <div class="py-4 markdown">
-        @((MarkupString)HtmlContent)
-    </div>
-    <script>hljs.highlightAll();</script>
-}
+<MudText Class="pl-4 pt-4" Typo="Typo.h6">@Title</MudText>
+<MudText Class="pl-4 pb-4" Typo="Typo.body2">@Created.ToString("D")</MudText>
+<br/>
+<MudDivider />
+<div class="py-4 markdown">
+    @((MarkupString)HtmlContent)
+</div>
 
 @code {
 
-    private Regex BlogMetaRegex = new Regex( @"^<!--\nAuthor: (?<Author>[\w\s]+)\nCreated: (?<Created>\d\d\d\d\d\d\d\d)\n-->");
-
-    private bool _onInitialized;
+    [Parameter]
+    public required string Title { get; init; }
 
     [Parameter]
-    public string Title { get; set; } = string.Empty;
+    public required string HtmlContent { get; init; }
 
     [Parameter]
-    public string MarkdownFile { get; set; } = string.Empty;
-
-    private string HtmlContent = string.Empty;
-
-    private string Author { get; set; } = string.Empty;
-
-    private DateTime? Created { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            var markdown = await HttpClient.GetStringAsync(MarkdownFile);
-            var pipeline = new MarkdownPipelineBuilder()
-            .UseAdvancedExtensions()
-            .UseMediaLinks()
-            .UseListExtras()
-            .UseEmojiAndSmiley()
-            .Build();
-
-            var blogMetaMatch = BlogMetaRegex.Match(markdown);
-
-            if (blogMetaMatch.Success)
-            {
-                var created = blogMetaMatch.Groups["Created"].Value;
-                Created = DateTime.ParseExact(created, "yyyyMMdd", null);
-                var author = blogMetaMatch.Groups["Author"].Value;
-            }
-            else
-            {
-                Console.WriteLine("No match");
-            }
-
-
-            HtmlContent = Markdig.Markdown.ToHtml(markdown, pipeline);
-
-            _onInitialized = true;
-
-        }
-        catch (Exception ex)
-        {
-            HtmlContent = ex.Message;
-        }
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (_onInitialized)
-        {
-            await JS.InvokeVoidAsync("hljs.highlightAll");
-            await JS.InvokeVoidAsync("renderCopyBlocks");
-        }
-    }
+    public required DateTime Created { get; set; }
 }

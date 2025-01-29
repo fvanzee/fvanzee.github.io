@@ -1,0 +1,46 @@
+@page "/blog"
+@using freekvanzee.Components
+@using freekvanzee.Helpers
+
+<PageTitle></PageTitle>
+<SeoHeader 
+    Title="Freek van Zee | Blog" 
+    Description="Freek van Zee's blog posts on various topics, including web development, cloud-native technologies, and Rust." 
+    Keywords="dotnet, developer"
+    Type="profile"
+    ImagePath="images/me.jpg"
+    UrlPath="blog/" />
+
+<MudStack>
+    @foreach (var blog in blogPosts)
+    {
+        var blogPath = $"blog/{blog.Slug}";
+        <MudLink Href=@blogPath>
+            <BlogCard ImageSrc=@blog.ImageSrc Title=@BlogHelper.GetTitleCaseTitle(blog.Slug) Created="@blog.Created" />
+        </MudLink>
+    }
+    </MudStack>
+
+    @code {
+    private List<BlogPost> blogPosts = new List<BlogPost>();
+
+    protected override void OnInitialized()
+    {
+        blogPosts = new List<BlogPost>
+        {
+            new BlogPost { 
+                Slug = "a-blazor-webassembly-static-site-on-github-pages", 
+                Created = new DateTime(2025, 1, 28) 
+                },
+        };
+    }
+
+    public class BlogPost
+    {
+        public required string Slug { get; init; }
+
+        public required DateTime Created { get; init; }
+
+        public string ImageSrc => $"images/blog/{Slug}.png";
+    }
+}

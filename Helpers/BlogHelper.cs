@@ -7,7 +7,7 @@ public static class BlogHelper
         // Take a snake_case string and return a Title Case string
         return string.Join(
             " ",
-            title.Split('_').Select(word => char.ToUpper(word[0]) + word.Substring(1).ToLower())
+            title.Split('-').Select(word => char.ToUpper(word[0]) + word.Substring(1).ToLower())
         );
     }
 }

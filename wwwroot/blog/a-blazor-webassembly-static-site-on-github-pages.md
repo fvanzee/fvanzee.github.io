@@ -1,4 +1,6 @@
 <!--
+Description: A full guide to setup a Blazor WASM site on Github Pages
+Keywords: blazor, wasm, webassembly, github-pages, blog
 Author: Freek van Zee
 Created: 20250128
 -->

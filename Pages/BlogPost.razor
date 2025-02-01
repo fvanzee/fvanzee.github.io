@@ -10,17 +10,12 @@
 @{
     var pageTitle = $"Freek van Zee | Blog | {BlogHelper.GetTitleCaseTitle(Slug)}";
 }
-<SeoHeader 
-    Type="article" 
-    Title=@pageTitle 
-    Description=@Description 
-    Keywords=@Keywords 
-    ImagePath=@ImageSrc 
+<SeoHeader Type="article" Title=@pageTitle Description=@Description Keywords=@Keywords ImagePath=@ImageSrc
     UrlPath=@UrlPath />
 
 <MudCard>
     <MudCardMedia Style="background-size: contain;" Image=@ImageSrc />
-    @if(!string.IsNullOrEmpty(HtmlContent))
+    @if (!string.IsNullOrEmpty(HtmlContent))
     {
         <MarkdownPaper HtmlContent=@HtmlContent Title=@BlogHelper.GetTitleCaseTitle(Slug) Created=@Created />
     }
@@ -30,7 +25,7 @@
 
     private bool _onInitialized;
 
-     private Regex BlogMetaRegex = new Regex( @"^<!--\nDescription: (?<Description>.+)\nKeywords: (?<Keywords>.+)\nAuthor: (?<Author>[\w\s]+)\nCreated: (?<Created>\d\d\d\d\d\d\d\d)\n-->");
+    private Regex BlogMetaRegex = new Regex(@"^<!--\nDescription: (?<Description>.+)\nKeywords: (?<Keywords>.+)\nAuthor: (?<Author>[\w\s]+)\nCreated: (?<Created>\d\d\d\d\d\d\d\d)\n-->");
 
     [Parameter]
     public required string Slug { get; init; }
@@ -52,6 +47,28 @@
     private DateTime Created { get; set; }
 
     protected override async Task OnInitializedAsync()
+    {
+
+        await UpdateHtmlContentAsync();
+        _onInitialized = true;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await UpdateHtmlContentAsync();
+        _onInitialized = true;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_onInitialized)
+        {
+            await JS.InvokeVoidAsync("hljs.highlightAll");
+            await JS.InvokeVoidAsync("renderCopyBlocks");
+        }
+    }
+
+    private async Task UpdateHtmlContentAsync()
     {
         try
         {
@@ -80,23 +97,10 @@
 
 
             HtmlContent = Markdig.Markdown.ToHtml(markdown, pipeline);
-
-            _onInitialized = true;
-
         }
         catch (Exception ex)
         {
             HtmlContent = ex.Message;
         }
     }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (_onInitialized)
-        {
-            await JS.InvokeVoidAsync("hljs.highlightAll");
-            await JS.InvokeVoidAsync("renderCopyBlocks");
-        }
-    }
-
 }

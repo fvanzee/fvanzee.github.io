@@ -12,7 +12,7 @@
     UrlPath="blog/" />
 
 <MudStack>
-    @foreach (var blog in blogPosts)
+    @foreach (var blog in blogPosts.OrderByDescending(blog => blog.Created))
     {
         var blogPath = $"blog/{blog.Slug}";
         <MudLink Href=@blogPath>
@@ -31,6 +31,10 @@
             new BlogPost { 
                 Slug = "a-blazor-webassembly-static-site-on-github-pages", 
                 Created = new DateTime(2025, 1, 28) 
+                },
+            new BlogPost { 
+                Slug = "integrating-emailjs-with-recaptcha-in-blazor-webassembly", 
+                Created = new DateTime(2025, 2, 1) 
                 },
         };
     }

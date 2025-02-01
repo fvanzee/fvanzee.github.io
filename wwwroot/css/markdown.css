@@ -5,6 +5,12 @@
     margin-left: 32px;
 }
 
+.markdown ol {
+    display: block;
+    padding: revert;
+    margin-left: 32px;
+}
+
 .markdown a {
     text-decoration: underline;
 }

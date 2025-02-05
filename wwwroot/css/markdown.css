@@ -28,6 +28,12 @@ p {
     width: 90%;
 }
 
+.markdown blockquote p {
+    background-color: grey;
+    padding: 4px;
+    border-radius: 3px;
+} 
+
 pre:has(code) {
     position: relative;
     overflow: auto;

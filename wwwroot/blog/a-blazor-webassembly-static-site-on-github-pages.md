@@ -4,6 +4,11 @@ Keywords: blazor, wasm, webassembly, github-pages, blog
 Author: Freek van Zee
 Created: 20250128
 -->
+
+> :information_source: Update 5 February 2025: Originally this site was hosted on GitHub pages, and this blog post describes how I achieved this. In the mean time I've moved the site to Cloudflare pages due to better route handing (see [404 page](blog/a-blazor-webassembly-static-site-on-github-pages#page) below).
+
+<br>
+
 For a long while I've wanted to setup a personal portfolio website.  
 <br>
 Being mainly a backend and DevOps developer specialized in .NET, using Blazor to do this seemed the right choice. I wanted to limit the amount of JavaScript (who doesn't?!) and CSS.
@@ -324,3 +329,22 @@ You might notice when you navigate to one of your pages and refresh, your end up
 To resolve this you can add a `404.html` page next to your `index.html`. GitHub Pages will load this file on `404` results, so it can be leveraged to rewrite to the root, while retaining path information in query parameters.
 
 Get the `404.html` page I am using [HERE](https://raw.githubusercontent.com/rafgraph/spa-github-pages/refs/heads/gh-pages/404.html)!
+
+<br>
+
+**Cloudflare pages** (Added 05-02-2025)
+
+<br>
+
+Using the custom `404.html` solution works pretty well for GitHub pages.  
+With Cloudflare pages, you actually don't need to implement this, as Cloudflare pages will always route to the root path (i.e. load `index.html`), regardless of the path that is requested. This is perfect for a SPA, as it will determine which page to render client side.  
+I honestly think this is an oversight on Github Pages, and they should also implement this.
+
+<br>
+
+The added benefit is that clients will never receive a 404 response, and no redirection has to take place, which also improves SEO. See the [Cloudflare documentation](https://developers.cloudflare.com/pages/configuration/serving-pages/#single-page-application-spa-rendering) for more information.
+
+<br>
+
+Make sure you don't add `404.html` if you decide to use Cloudflare pages instead.
+Setting up Cloudflare pages could deserve another blog post, although the [Cloudflare Blazor documentation](https://developers.cloudflare.com/pages/framework-guides/deploy-a-blazor-site/) is pretty straight forward.
